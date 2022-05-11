@@ -29,6 +29,7 @@ window.onload = () => { // once window load
 let playerXIcon = "fas fa-times"; // class name of fontawesome cross icon
 let playerOIcon = "far fa-circle"; // class name of fontawesome circle icon
 let playerSign ="X"; // suppose player will be X
+let runBot = true;
 
 // user clicked function
 function clickedBox(element){
@@ -47,16 +48,22 @@ function clickedBox(element){
         element.setAttribute("id",playerSign);
     }
 
+    selectWinner(); // callingg the winner function 
+    playBoard.style.pointerEvents="none";
     element.style.pointerEvents="none"; // once user select any box then that box can't be selected again
     let randomDelayTime = ((Math.random()*1000)+200).toFixed(); // generating random time delay so bot will delay randomly to select box
     setTimeout(()=>{
-        bot(); // calling bot function
+        bot(runBot); // calling bot function
     },randomDelayTime); //passing random delay time
 }
 
 // bot click function
-function bot(){
+function bot(runBot){
+
+    if(runBot){ // if runbot is true then run thn following codes 
+
     // first change the playerSign .. so if user has X value in id then bot will have O
+    
     playerSign="O";
     let array = []; // creating empty array.. we'll store unselected box index in this array
     for (let i = 0; i < allBox.length; i++) {
@@ -85,5 +92,35 @@ function bot(){
     } 
 
     allBox[randomBox].style.pointerEvents="none"; // once bot select any box then user can't select or click on that box
+    playBoard.style.pointerEvents ="auto";
+    playerSign = "X"; // passing the x value
+    }
+   
+}
 
+// let work on select the winner 
+function getClass(){
+    return document.querySelector(".box" + idname).id; // returning id name
+}
+
+function checkClass(val1,val2,val3,sign){
+    if(getClass(val1) == sign && getClass(val2) == sign && getClass(val3) == sign){
+        return true;
+    }
+}
+
+function selectWinner(){ // if one combination of them matched then select the winner
+    if(checkClass(1,2,3,playerSign) || 
+    checkClass(4,5,6,playerSign) || 
+    checkClass(7,8,9,playerSign) || 
+    checkClass(1,4,7,playerSign) ||
+    checkClass(2,5,8,playerSign) ||
+    checkClass(3,6,9,playerSign) ||
+    checkClass(1,5,9,playerSign) ||
+    checkClass(3,5,7,playerSign)) {
+        
+    // once match won by someone then stop the bot 
+        runBot = false;
+        bot(runBot);
+    }
 }
