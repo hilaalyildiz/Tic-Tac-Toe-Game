@@ -4,7 +4,11 @@ selectXBtn = selectBox.querySelector(".playerX"),
 selectOBtn = selectBox.querySelector(".playerO"),
 playBoard = document.querySelector(".play-board"),
 allBox = document.querySelectorAll("section span"),
-players = document.querySelector("players");
+players = document.querySelector("players"),
+resultBox = document.querySelector(".result-box"),
+wonText = resultBox.querySelector(".won-box"),
+replayBtn = resultBox.querySelector("button");
+
 
 
 window.onload = () => { // once window load
@@ -122,5 +126,12 @@ function selectWinner(){ // if one combination of them matched then select the w
     // once match won by someone then stop the bot 
         runBot = false;
         bot(runBot);
+
+        setTimeout(()=>{ // we'll delay to show result box 
+            playBoard.classList.remove("show");
+            resultBox.classList.add("show");
+        },700); // 700 ms delay
+
+       wonText.innerHTML= `Player <p>${playerSign}</p> won the game!`;
     }
 }
